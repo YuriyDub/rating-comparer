@@ -1,7 +1,7 @@
 import { Box, Divider, Grid } from '@mui/material';
 import { RatingCard } from '../../components/RatingCard';
 import { useDispatch, useSelector } from 'react-redux';
-import { addRating, removeRating } from '../../store/slices/ratingsSlice';
+import { addRating, removeRating, renameRating } from '../../store/slices/ratingsSlice';
 import { RatingForm } from '../../components/RatingForm';
 
 export const RatingPage = () => {
@@ -21,7 +21,11 @@ export const RatingPage = () => {
       <Grid container spacing={2}>
         {list?.map((r) => (
           <Grid key={r.id} item xs={12} sm={6} md={4}>
-            <RatingCard rating={r} deleteHandler={() => dispatch(removeRating({ id: r.id }))} />
+            <RatingCard
+              rating={r}
+              editHandler={(name) => dispatch(renameRating({ id: r.id, name: name }))}
+              deleteHandler={() => dispatch(removeRating({ id: r.id }))}
+            />
           </Grid>
         ))}
       </Grid>

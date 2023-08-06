@@ -42,10 +42,8 @@ function App() {
             <Box
               sx={{ flexGrow: 1, justifyContent: 'center', display: { xs: 'none', md: 'flex' } }}>
               {pages.map((page) => (
-                <NavLink style={{ textDecoration: 'none' }} to={`/${page}`}>
-                  <Button key={page} sx={{ my: 2, color: 'white', display: 'block' }}>
-                    {page}
-                  </Button>
+                <NavLink key={page} style={{ textDecoration: 'none' }} to={`/${page}`}>
+                  <Button sx={{ my: 2, color: 'white', display: 'block' }}>{page}</Button>
                 </NavLink>
               ))}
             </Box>

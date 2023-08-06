@@ -16,7 +16,14 @@ const ratingsSlice = createSlice({
     removeRating(state, action) {
       state.list = state.list.filter((l) => l.id !== action.payload.id);
     },
-    renameRating(state, action) {},
+    renameRating(state, action) {
+      state.list = state.list.map((l) => {
+        if (l.id === action.payload.id) {
+          return { ...l, name: action.payload.name };
+        }
+        return l;
+      });
+    },
     addStudent(state, action) {
       const currentRating = state.list.find((e) => e.id === action.payload.id);
       const subjects = [];
@@ -25,8 +32,6 @@ const ratingsSlice = createSlice({
         const newObj = { id: v1(), name: currentRating.subjects[i], mark: 0 };
         subjects.push(newObj);
       }
-
-      console.log(currentRating.subjects.length);
 
       state.list
         .find((e) => e.id === action.payload.id)

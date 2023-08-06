@@ -49,7 +49,6 @@ export const RatingTable = ({ rating, id, ...props }) => {
               </TableHead>
               <TableBody>
                 {rating.students.map((r) => {
-                  console.log(r);
                   return (
                     <TableRow>
                       <TableCell>{r.name + ' ' + r.surname}</TableCell>
