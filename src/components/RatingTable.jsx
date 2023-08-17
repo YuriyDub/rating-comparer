@@ -5,23 +5,33 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { Box, Button, Divider, Stack, TextField, Typography } from '@mui/material';
+import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
+import { Box, Button, Divider, IconButton, TextField, Typography } from '@mui/material';
 import { AddItemPopup } from './AddItemPopup';
 import { StudentForm } from './StudentForm';
+import { EditableSpan } from './EditableSpan';
 
-export const RatingTable = ({ rating, id, ...props }) => {
+export const RatingTable = ({
+  rating,
+  id,
+  addStudentHandler,
+  removeStudentHandler,
+  changeStudentNameHandler,
+  changeStudentSurnameHandler,
+  ...props
+}) => {
   const subjects = rating.subjects;
 
   return (
     <>
       {rating ? (
-        <Box>
-          <TableContainer component={Paper} {...props}>
-            <Typography variant="h5" sx={{ fontWeight: 500, p: 2, flex: '1 1 100%' }}>
+        <Box sx={{ width: 'auto', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <TableContainer component={Paper} sx={{ width: 'auto' }} {...props}>
+            <Typography variant="h5" sx={{ fontWeight: 500, p: 2 }}>
               {rating.name}
             </Typography>
             <Divider />
-            <Table>
+            <Table sx={{ width: 'auto' }}>
               <TableHead>
                 <TableRow>
                   <TableCell sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
@@ -48,14 +58,51 @@ export const RatingTable = ({ rating, id, ...props }) => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {rating.students.map((r) => {
+                {rating.students.map((student) => {
                   return (
-                    <TableRow>
-                      <TableCell>{r.name + ' ' + r.surname}</TableCell>
-                      {r.subjects.map((s) => {
+                    <TableRow key={student.id}>
+                      <TableCell
+                        sx={{
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          alignItems: 'center',
+                        }}>
+                        <Box sx={{ display: 'flex', gap: 1, overflow: 'hidden' }}>
+                          <EditableSpan
+                            title={student.name}
+                            edit={(name) =>
+                              changeStudentNameHandler({ name, id, studentId: student.id })
+                            }
+                            value={student.name}
+                            component={<Typography component={'span'}>{student.name}</Typography>}
+                          />
+                          <EditableSpan
+                            title={student.surname}
+                            edit={(surname) =>
+                              changeStudentSurnameHandler({ surname, id, studentId: student.id })
+                            }
+                            value={student.surname}
+                            component={
+                              <Typography component={'span'}>{student.surname}</Typography>
+                            }
+                          />
+                        </Box>
+                        <IconButton
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            removeStudentHandler({ id, studentId: student.id });
+                          }}
+                          size="small"
+                          sx={{
+                            transition: '0.1s ease-in-out',
+                          }}>
+                          <PersonRemoveIcon fontSize="inherit" />
+                        </IconButton>
+                      </TableCell>
+                      {student.subjects.map((subject) => {
                         return (
-                          <TableCell key={s.id} align="center">
-                            {s.mark}
+                          <TableCell key={subject.id} align="center">
+                            {subject.mark}
                           </TableCell>
                         );
                       })}
@@ -65,8 +112,8 @@ export const RatingTable = ({ rating, id, ...props }) => {
               </TableBody>
             </Table>
           </TableContainer>
-          <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-            <StudentForm addStudent={props.addStudent} id={id} />
+          <Box sx={{ display: 'flex', justifyContent: 'center', mt: 1 }}>
+            <StudentForm addStudentHandler={addStudentHandler} id={id} />
           </Box>
         </Box>
       ) : null}

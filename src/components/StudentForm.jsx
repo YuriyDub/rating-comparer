@@ -12,7 +12,7 @@ export const StudentForm = (props) => {
   } = useForm({ mode: 'onBlur' });
 
   const addStudent = (student) => {
-    props.addStudent({ name: student.name, surname: student.surname, id: props.id });
+    props.addStudentHandler({ name: student.name, surname: student.surname, id: props.id });
   };
 
   return (
@@ -38,6 +38,8 @@ export const StudentForm = (props) => {
           helperText={errors?.name?.message}
           {...register('name', {
             required: 'field is required',
+            minLength: { value: 2, message: 'min 2 symbols' },
+            maxLength: { value: 15, message: 'max 15 symbols' },
           })}
         />
         <TextField
@@ -50,6 +52,8 @@ export const StudentForm = (props) => {
           helperText={errors?.surname?.message}
           {...register('surname', {
             required: 'field is required',
+            minLength: { value: 2, message: 'min 2 symbols' },
+            maxLength: { value: 15, message: 'max 15 symbols' },
           })}
         />
         <Button variant="contained" type="submit" sx={{ width: { xs: '100%', sm: 'inherit' } }}>

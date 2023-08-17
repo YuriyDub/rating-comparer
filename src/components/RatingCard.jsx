@@ -1,9 +1,12 @@
 import { Box, Card, CardContent, Chip, Divider, IconButton, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import ClearIcon from '@mui/icons-material/Clear';
-import { EditedTitle } from './EditedTitle';
+import { EditableSpan } from './EditableSpan';
+import { useState } from 'react';
 
 export const RatingCard = ({ rating, deleteHandler, editHandler }) => {
+  const [isHovered, setIsHovered] = useState(false);
+
   const navigate = useNavigate();
 
   return (
@@ -13,7 +16,7 @@ export const RatingCard = ({ rating, deleteHandler, editHandler }) => {
       onClick={() => {
         navigate(`/ratings/${rating.id}`);
       }}>
-      <CardContent>
+      <CardContent onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
         <Box
           sx={{
             display: 'flex',
@@ -21,7 +24,7 @@ export const RatingCard = ({ rating, deleteHandler, editHandler }) => {
             position: 'relative',
             justifyContent: 'center',
           }}>
-          <EditedTitle
+          <EditableSpan
             title={rating.name}
             edit={editHandler}
             value={rating.name}
@@ -41,6 +44,8 @@ export const RatingCard = ({ rating, deleteHandler, editHandler }) => {
             }}
             size="small"
             sx={{
+              opacity: isHovered ? 1 : 0,
+              transition: '0.1s ease-in-out',
               position: 'absolute',
               right: -5,
               top: -5,
@@ -48,9 +53,9 @@ export const RatingCard = ({ rating, deleteHandler, editHandler }) => {
             <ClearIcon fontSize="inherit" />
           </IconButton>
         </Box>
-        <Divider sx={{ mb: 1 }} />
+        <Divider sx={{ mb: 1, pt: 0.5, pb: 0.5 }} />
         {rating.subjects?.map((s) => (
-          <Chip key={s.id} label={s.name} sx={{ m: '4px' }} />
+          <Chip key={s.id} label={s.name} sx={{ m: '4px', cursor: 'pointer' }} />
         ))}
       </CardContent>
     </Card>

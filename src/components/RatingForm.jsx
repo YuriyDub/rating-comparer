@@ -9,13 +9,11 @@ import {
   Typography,
 } from '@mui/material';
 import { useForm } from 'react-hook-form';
-import { useState } from 'react';
 import AddIcon from '@mui/icons-material/Add';
 import { v1 } from 'uuid';
+import { useState } from 'react';
 
 export const RatingForm = (props) => {
-  const [subjects, setSubjects] = useState([]);
-
   const {
     register,
     formState: { errors },
@@ -23,21 +21,27 @@ export const RatingForm = (props) => {
     reset,
     setValue,
     getValues,
-  } = useForm({ mode: 'onBlur' });
+  } = useForm({ mode: 'onSubmit' });
+
+  const [subjects, setSubjects] = useState([]);
 
   const addRating = (data) => {
     if (data?.name?.trim() === '') {
     } else {
-      props.addItem({ name: data.name, subjects: data.subjects, id: v1() });
+      props.addItem({ name: data.name, subjects: subjects, id: v1() });
+      setSubjects([]);
       reset();
     }
   };
 
-  const addSubject = (name) => {
+  const addSubject = () => {
+    const name = getValues('subject');
+
     if (name?.trim() === '') {
+      return;
     } else {
-      setSubjects((prev) => [...prev, { name, id: v1() }]);
-      setValue('subjects', subjects);
+      setSubjects((prev) => [...prev, { name: name, id: v1() }]);
+      setValue('subject', '');
     }
   };
 
@@ -59,8 +63,15 @@ export const RatingForm = (props) => {
       component="form"
       onSubmit={handleSubmit((data) => {
         addRating(data);
-        setSubjects([]);
       })}>
+      <Typography
+        backgroundColor="primary.main"
+        color="primary.text.light"
+        variant="h5"
+        sx={{ textAlign: 'center', width: '100%', textTransform: 'uppercase', p: 1 }}>
+        Rating Form
+      </Typography>
+      <Divider flexItem sx={{ mb: 2, mt: 1 }} />
       <TextField
         fullWidth
         size="small"
@@ -107,18 +118,17 @@ export const RatingForm = (props) => {
               error={!!errors.subject}
               helperText={errors?.subject?.message}
               {...register('subject', {
-                minLength: { value: 3, message: 'min 3 symbols' },
+                minLength: { value: 2, message: 'min 2 symbols' },
                 maxLength: { value: 15, message: 'max 15 symbols' },
               })}
-            />
-            <IconButton
-              onClick={() => {
-                if (!errors.subject) {
-                  addSubject(getValues('subject'));
-                  setValue('subject', '');
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && !errors.subject) {
+                  e.preventDefault();
+                  addSubject();
                 }
               }}
-              sx={{ ml: 1 }}>
+            />
+            <IconButton onClick={addSubject} sx={{ ml: 1 }}>
               <AddIcon />
             </IconButton>
           </Box>

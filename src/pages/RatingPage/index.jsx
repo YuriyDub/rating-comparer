@@ -23,7 +23,9 @@ export const RatingPage = () => {
           <Grid key={r.id} item xs={12} sm={6} md={4}>
             <RatingCard
               rating={r}
-              editHandler={(name) => dispatch(renameRating({ id: r.id, name: name }))}
+              editHandler={(name, studentName) =>
+                dispatch(renameRating({ id: r.id, name, studentName }))
+              }
               deleteHandler={() => dispatch(removeRating({ id: r.id }))}
             />
           </Grid>

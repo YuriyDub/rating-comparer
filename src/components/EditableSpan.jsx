@@ -1,8 +1,8 @@
-import { Box, TextField } from '@mui/material';
+import { Box, Input } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import React, { useState } from 'react';
 
-export const EditedTitle = ({ title, edit, component }) => {
+export const EditableSpan = ({ title, edit, component }) => {
   const [isEdit, setIsEdit] = useState(false);
 
   const {
@@ -10,6 +10,7 @@ export const EditedTitle = ({ title, edit, component }) => {
     formState: { errors },
     handleSubmit,
     reset,
+    trigger,
   } = useForm({ mode: 'onBlur' });
 
   return (
@@ -22,29 +23,28 @@ export const EditedTitle = ({ title, edit, component }) => {
         setIsEdit(false);
       })}>
       {isEdit ? (
-        <Box
-          sx={{ display: 'flex', p: 1 }}
+        <Input
+          sx={{ width: 'auto' }}
+          minLength
           onClick={(e) => {
             e.stopPropagation();
-          }}>
-          <TextField
-            onBlur={() => {
-              setIsEdit(false);
-            }}
-            autoFocus
-            size="small"
-            type="text"
-            variant="standard"
-            defaultValue={title}
-            error={!!errors.name}
-            helperText={errors?.name?.message}
-            {...register('name', {
-              required: 'field is required',
-              minLength: { value: 3, message: 'min 3 symbols' },
-              maxLength: { value: 15, message: 'max 15 symbols' },
-            })}
-          />
-        </Box>
+          }}
+          onBlurCapture={async () => {
+            setIsEdit(false);
+            await trigger('username');
+          }}
+          size="small"
+          type="text"
+          variant="standard"
+          defaultValue={title}
+          error={!!errors.name}
+          autoFocus
+          {...register('name', {
+            required: 'field is required',
+            minLength: { value: 2, message: 'min 2 symbols' },
+            maxLength: { value: 15, message: 'max 15 symbols' },
+          })}
+        />
       ) : (
         <div
           onClick={(e) => {

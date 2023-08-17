@@ -3,7 +3,12 @@ import { RatingTable } from '../../components/RatingTable';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { Box } from '@mui/material';
-import { addStudent } from '../../store/slices/ratingsSlice';
+import {
+  addStudent,
+  removeStudent,
+  changeStudentName,
+  changeStudentSurname,
+} from '../../store/slices/ratingsSlice';
 
 export const Detailed = () => {
   const { id } = useParams('id');
@@ -17,8 +22,17 @@ export const Detailed = () => {
         <RatingTable
           rating={list.find((r) => r.id === id)}
           id={id}
-          addStudent={(s) => {
-            dispatch(addStudent(s));
+          addStudentHandler={(p) => {
+            dispatch(addStudent(p));
+          }}
+          removeStudentHandler={(p) => {
+            dispatch(removeStudent(p));
+          }}
+          changeStudentNameHandler={(p) => {
+            dispatch(changeStudentName(p));
+          }}
+          changeStudentSurnameHandler={(p) => {
+            dispatch(changeStudentSurname(p));
           }}
         />
       ) : null}

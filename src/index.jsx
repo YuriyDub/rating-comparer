@@ -7,7 +7,6 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Provider } from 'react-redux';
 import { store, persistor } from './store';
 import { PersistGate } from 'redux-persist/integration/react';
-import './index.scss';
 
 const theme = createTheme({
   palette: {
@@ -15,6 +14,10 @@ const theme = createTheme({
       main: '#526D82',
       light: '#9DB2BF',
       dark: '#27374D',
+      text: {
+        light: '#fff',
+        dark: '#000',
+      },
     },
   },
 });

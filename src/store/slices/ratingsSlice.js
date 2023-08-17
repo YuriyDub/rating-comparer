@@ -33,17 +33,33 @@ const ratingsSlice = createSlice({
         subjects.push(newObj);
       }
 
-      state.list
-        .find((e) => e.id === action.payload.id)
-        .students.push({
-          id: v1(),
-          name: action.payload.name,
-          surname: action.payload.surname,
-          subjects: subjects,
-        });
+      currentRating.students.push({
+        id: v1(),
+        name: action.payload.name,
+        surname: action.payload.surname,
+        subjects: subjects,
+      });
     },
-    removeStudent(state, action) {},
-    renameStudent(state, action) {},
+    removeStudent(state, action) {
+      const currentRating = state.list.find((r) => r.id === action.payload.id);
+
+      currentRating.students = currentRating.students.filter(
+        (s) => s.id !== action.payload.studentId,
+      );
+    },
+    changeStudentName(state, action) {
+      const currentRating = state.list.find((r) => r.id === action.payload.id);
+      const currentStudent = currentRating.students.find((s) => s.id === action.payload.studentId);
+      console.log(currentStudent.name);
+
+      currentStudent.name = action.payload.name;
+    },
+    changeStudentSurname(state, action) {
+      const currentRating = state.list.find((r) => r.id === action.payload.id);
+      const currentStudent = currentRating.students.find((s) => s.id === action.payload.studentId);
+
+      currentStudent.surname = action.payload.surname;
+    },
     addSubject(state, action) {},
     removeSubject(state, action) {},
     renameSubject(state, action) {},
@@ -59,7 +75,8 @@ export const {
   renameRating,
   addStudent,
   removeStudent,
-  renameStudent,
+  changeStudentName,
+  changeStudentSurname,
   addSubject,
   removeSubject,
   renameSubject,
